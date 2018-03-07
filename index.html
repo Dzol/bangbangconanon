@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>!!ConAnon</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<style>
+		p {
+			line-height: 1.75;
+			font-size: 18px;
+			font-family: sans-serif;
+		}
+	</style>
+</head>
+<body>
+	<div id="app" class="container">
+		<h1>!!Con Anon</h1>
+		<p v-if="error">{{error}}</p>
+		<div v-if="!talks.length">
+			<div class="form-group">
+				<textarea class="form-control" placeholder="Paste CSV from spreadsheet here" v-model="rawCSV"></textarea>
+				<button class="btn btn-info" @click="parseCSV">Go!</button>
+			</div>
+
+			<ol>
+				<li>Open your anonymizing spreadsheet and select <code>File > Download As > CSV</code>.
+				<li>Open the downloaded file in a text editor.
+				<li>Copy the entire contents of that file into the textarea above and hit the "Go!" button.
+				<li>Enter any ID number to display that talk.
+			</ol>
+		</div>
+		<div v-else>
+			<input v-model="talkToSelect" type="number" placeholder="Talk ID"><button v-on:click="selectTalk">Load</button>
+			<div v-if="selectedTalk">
+				<h2># {{selectedTalk.id}} - {{selectedTalk.title}}</h2>
+				<h2>Abstract</h2>
+				<p v-html="format(selectedTalk.abstract)"></p>
+				<h2>Timeline</h2>
+				<p v-html="format(selectedTalk.timeline)"></p>
+				<h2>Audience</h2>
+				<p v-html="format(selectedTalk.audience)"></p>
+			</div>
+			<div v-else>
+				No talk selected.
+			</div>
+		</div>
+	</div>
+	<script src="./papaparse.min.js"></script>
+	<script src="https://unpkg.com/vue"></script>
+	<script src="./script.js"></script>
+</body>
+</html>
